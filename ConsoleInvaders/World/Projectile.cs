@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleInvaders
+﻿namespace ConsoleInvaders
 {
     class Projectile
     {
 
-        public Cell Model = new Cell(0,0,"!");
-        private int Direction;
+        public Cell Model = new Cell(0, 0, "!");
+        public bool Collision = false;
 
-        public bool collision = false;
+        private readonly int _direction;
 
         /// <summary>
         /// Ctor must take X and Y transform
@@ -28,18 +22,19 @@ namespace ConsoleInvaders
             Model.X = x;
             Model.Y = y;
             Model.isRigid = true;
-            Direction = direction;
+            _direction = direction;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Update()
         {
-            if (Model.X == 0)
-                collision = true;
+            if (Model.Y == 0)
+            {
+                Collision = true;
+            }
             else
-                Model.X += Direction;
+            {
+                Model.Y += _direction;
+            }
         }
     }
 }

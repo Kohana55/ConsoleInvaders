@@ -43,7 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\RectangleExtensions.cs" />
+    <Compile Include="Invaders\BaseInvader.cs" />
     <Compile Include="Invaders\Deadalus.cs" />
+    <Compile Include="Invaders\IInvader.cs" />
     <Compile Include="Player\DefenceStructure.cs" />
     <Compile Include="Invaders\Galactica.cs" />
     <Compile Include="Invaders\Serenity.cs" />
@@ -56,6 +59,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="World\Projectile.cs" />
+    <Compile Include="Models\Rectangle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

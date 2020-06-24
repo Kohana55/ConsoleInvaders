@@ -1,9 +1,7 @@
-﻿using System;
+﻿using ConsoleInvaders.Extensions;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ConsoleInvaders
 {
@@ -26,18 +24,27 @@ namespace ConsoleInvaders
         /// Updates all ballistics
         /// To be run in its own thread
         /// </summary>
-        public void Update()
+        public void Update(IEnumerable<IInvader> invaders)
         {
-            while(true)
+            while (true)
             {
-                if (Projectiles.Count > 0)
+                if (Projectiles.Any())
                 {
-                    foreach (Projectile projectile in Projectiles.ToList())
+                    foreach (var projectile in Projectiles)
                     {
                         projectile.Update();
-                        if (projectile.collision)
-                            Projectiles.Remove(projectile);
+
+                        foreach (var invader in invaders)
+                        {
+                            if (invader.GetHitbox().ContainsCell(projectile.Model))
+                            {
+                                invader.Dead = true;
+                                projectile.Collision = true;
+                            }
+                        }
                     }
+
+                    Projectiles.RemoveAll(x => x.Collision);
                 }
 
                 Thread.Sleep(100);
