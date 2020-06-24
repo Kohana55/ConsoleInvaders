@@ -1,38 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ConsoleInvaders
 {
-    class Invaders
+    internal class Invaders
     {
+        public List<IInvader> Enemies = new List<IInvader>();
+        public int LeftBound;
+        public int RightBound;
 
-        /// <summary>
-        /// Rows 1&2 of Invaders
-        /// </summary>
-        public Galactica[] row1Galacticas;
-        public Galactica[] row2Galacticas;
-
-        /// <summary>
-        /// Rows 3&4 of Invaders
-        /// </summary>
-        public Serenity[] row3Serenties;
-        public Serenity[] row4Serenties;
-
-        /// <summary>
-        /// Row 5 of Invaders
-        /// </summary>
-        public Deadalus[] row5Deadalus;
-
-        public int leftBound;
-        public int rightBound;
-        private Cell leftBoundCell;
-        private Cell rightBoundCell;
-
-        private readonly int numberOfInvaders = 14;
+        private readonly Cell _leftBoundCell;
+        private readonly Cell _rightBoundCell;
+        private readonly int _invadersPerRow = 14;
 
         /// <summary>
         /// Direction is += onto the invaders Y coord.
@@ -48,46 +28,19 @@ namespace ConsoleInvaders
         /// </summary>
         public Invaders()
         {
-            row1Galacticas = new Galactica[numberOfInvaders];
-            row2Galacticas = new Galactica[numberOfInvaders];
-            int offset = 0;
-            for (int i = 0; i < numberOfInvaders; i++)
+            for (var i = 0; i < _invadersPerRow; i++)
             {
-                for (int j = 0; j < 3; j++)
-                {
-                    row1Galacticas[i] = new Galactica(9, (5 + offset) + j);
-                    row2Galacticas[i] = new Galactica(8, (5 + offset) + j);
-                }
-                offset += 3;
-            }
-
-            row3Serenties = new Serenity[numberOfInvaders];
-            row4Serenties = new Serenity[numberOfInvaders];
-            offset = 0;
-            for (int i = 0; i < numberOfInvaders; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    row3Serenties[i] = new Serenity(7, (5 + offset) + j);
-                    row4Serenties[i] = new Serenity(6, (5 + offset) + j);
-                }
-                offset += 3;
-            }
-
-            row5Deadalus = new Deadalus[numberOfInvaders];
-            offset = 0;
-            for (int i = 0; i < numberOfInvaders; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    row5Deadalus[i] = new Deadalus(5, (5 + offset) + j);
-                }
-                offset += 3;
+                Enemies.Add(new Galactica(5 + (3 * i), 9));
+                Enemies.Add(new Galactica(5 + (3 * i), 8));
+                Enemies.Add(new Serenity(5 + (3 * i), 7));
+                Enemies.Add(new Serenity(5 + (3 * i), 6));
+                Enemies.Add(new Deadalus(5 + (3 * i), 5));
             }
 
             // Grab reference to left most and right most cells of any row
-            rightBoundCell = row1Galacticas[row1Galacticas.Length - 1].Model[2];
-            leftBoundCell = row1Galacticas[0].Model[0];
+            _leftBoundCell = Enemies.First().Model.First();
+
+            _rightBoundCell = Enemies.Last().Model.Last();
         }
 
         /// <summary>
@@ -99,7 +52,7 @@ namespace ConsoleInvaders
             Thread animationThread = new Thread(Animate);
             animationThread.Start();
 
-            while(true)
+            while (true)
             {
                 UpdateDirectionAndDrop();
                 Update();
@@ -113,23 +66,15 @@ namespace ConsoleInvaders
         /// </summary>
         private void Update()
         {
-            for (int i = 0; i < row1Galacticas.Length; i++)
+            for (int i = 0; i < Enemies.Count; i++)
             {
                 if (drop)
                 {
-                    row1Galacticas[i].Drop();
-                    row2Galacticas[i].Drop();
-                    row3Serenties[i].Drop();
-                    row4Serenties[i].Drop();
-                    row5Deadalus[i].Drop();
+                    Enemies[i].Drop();
                 }
                 else
                 {
-                    row1Galacticas[i].Move(direction);
-                    row2Galacticas[i].Move(direction);
-                    row3Serenties[i].Move(direction);
-                    row4Serenties[i].Move(direction);
-                    row5Deadalus[i].Move(direction);
+                    Enemies[i].Move(direction);
                 }
             }
 
@@ -143,13 +88,9 @@ namespace ConsoleInvaders
         {
             while (true)
             {
-                for (int i = 0; i < row1Galacticas.Length; i++)
+                for (int i = 0; i < Enemies.Count(); i++)
                 {
-                    row1Galacticas[i].Animate();
-                    row2Galacticas[i].Animate();
-                    row3Serenties[i].Animate();
-                    row4Serenties[i].Animate();
-                    row5Deadalus[i].Animate();
+                    Enemies[i].Animate();
                 }
 
                 Thread.Sleep(250);
@@ -163,12 +104,12 @@ namespace ConsoleInvaders
         private void UpdateDirectionAndDrop()
         {
             // Update direction 
-            if (direction == 1 && rightBoundCell.Y == rightBound - 1)
+            if (direction == 1 && _rightBoundCell.X == RightBound - 1)
             {
                 direction = -1;
                 drop = true;
             }
-            else if (direction == -1 && leftBoundCell.Y == 0)
+            else if (direction == -1 && _leftBoundCell.X == 0)
             {
                 direction = 1;
                 drop = true;

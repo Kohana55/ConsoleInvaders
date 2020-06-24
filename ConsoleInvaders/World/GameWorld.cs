@@ -1,28 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace ConsoleInvaders
 {
     class GameWorld
     {
-        public int X = 25;
-        public int Y = 60;
+        public int X = 60;
+        public int Y = 25;
 
-        private Cell[,] board;
-        private Player player;
-        private Invaders invaders;
-        private DefenceStructure[] structures;
-        private BallisticManager ballisticManager;
+        private Cell[,] _board;
+        private Player _player;
+        private Invaders _invaders;
+        private DefenceStructure[] _structures;
+        private BallisticManager _ballisticManager;
 
         /// <summary>
         /// Standard Ctor
         /// </summary>
         public GameWorld()
         {
-            board = new Cell[X, Y];
+            _board = new Cell[X, Y];
             InitiateGameBoard();
             InitiateDefence();
         }
@@ -32,11 +28,11 @@ namespace ConsoleInvaders
         /// </summary>
         private void InitiateGameBoard()
         {
-            for (int i = 0; i < X; i++)
+            for (int x = 0; x < X; x++)
             {
-                for (int j = 0; j < Y; j++)
+                for (int y = 0; y < Y; y++)
                 {
-                    board[i, j] = new Cell(i, j);
+                    _board[x, y] = new Cell(x, y);
                 }
             }
         }
@@ -46,11 +42,11 @@ namespace ConsoleInvaders
         /// </summary>
         private void InitiateDefence()
         {
-            structures = new DefenceStructure[4];
+            _structures = new DefenceStructure[4];
             int structureOffset = 6;
             for (int i = 0; i < 4; i++)
             {
-                structures[i] = new DefenceStructure(X - 7, structureOffset);
+                _structures[i] = new DefenceStructure(structureOffset, Y - 7);
                 structureOffset += 14;
             }
         }
@@ -63,7 +59,7 @@ namespace ConsoleInvaders
         /// <returns></returns>
         public string GetCellContents(int x, int y)
         {
-            return board[x, y].Contents;
+            return _board[x, y].Contents;
         }
 
         /// <summary>
@@ -72,9 +68,9 @@ namespace ConsoleInvaders
         /// <param name="argPlayer"></param>
         public void RegisterPlayer(Player argPlayer)
         {
-            player = argPlayer;
-            player.X = X;
-            player.Y = Y;
+            _player = argPlayer;
+            _player.X = X;
+            _player.Y = Y;
         }
 
         /// <summary>
@@ -83,9 +79,9 @@ namespace ConsoleInvaders
         /// <param name="invaders"></param>
         public void RegisterInvaders(Invaders argInvaders)
         {
-            invaders = argInvaders;
-            invaders.leftBound = X;
-            invaders.rightBound = Y;
+            _invaders = argInvaders;
+            _invaders.LeftBound = 1;
+            _invaders.RightBound = X;
         }
 
         /// <summary>
@@ -94,7 +90,7 @@ namespace ConsoleInvaders
         /// <param name="argBallisticManager"></param>
         public void RegisterBallisticManager(BallisticManager argBallisticManager)
         {
-            ballisticManager = argBallisticManager;
+            _ballisticManager = argBallisticManager;
         }
 
         /// <summary>
@@ -114,9 +110,9 @@ namespace ConsoleInvaders
         /// </summary>
         private void UpdatePlayerPosition()
         {
-            foreach(Cell cell in player.model)
+            foreach (Cell cell in _player.model)
             {
-                board[cell.X, cell.Y] = cell;
+                _board[cell.X, cell.Y] = cell;
             }
         }
 
@@ -125,29 +121,9 @@ namespace ConsoleInvaders
         /// </summary>
         private void UpdateInvadersPosition()
         {
-            // Galacticas
-            for (int i = 0; i < invaders.row1Galacticas.Length; i++)
+            foreach (var cell in _invaders.Enemies.Where(x => !x.Dead).SelectMany(x => x.Model))
             {
-                foreach (Cell cell in invaders.row1Galacticas[i].Model)
-                {
-                    board[cell.X, cell.Y] = cell;
-                }
-                foreach (Cell cell in invaders.row2Galacticas[i].Model)
-                {
-                    board[cell.X, cell.Y] = cell;
-                }
-                foreach (Cell cell in invaders.row3Serenties[i].Model)
-                {
-                    board[cell.X, cell.Y] = cell;
-                }
-                foreach (Cell cell in invaders.row4Serenties[i].Model)
-                {
-                    board[cell.X, cell.Y] = cell;
-                }
-                foreach (Cell cell in invaders.row5Deadalus[i].Model)
-                {
-                    board[cell.X, cell.Y] = cell;
-                }
+                _board[cell.X, cell.Y] = cell;
             }
         }
 
@@ -156,9 +132,9 @@ namespace ConsoleInvaders
         /// </summary>
         private void UpdateBallistics()
         {
-            foreach (Projectile projectile in ballisticManager.Projectiles)
+            foreach (Projectile projectile in _ballisticManager.Projectiles)
             {
-                board[projectile.Model.X, projectile.Model.Y] = projectile.Model;
+                _board[projectile.Model.X, projectile.Model.Y] = projectile.Model;
             }
         }
 
@@ -169,9 +145,9 @@ namespace ConsoleInvaders
         {
             for (int i = 0; i < 4; i++)
             {
-                foreach (Cell cell in structures[i].Model)
+                foreach (Cell cell in _structures[i].Model)
                 {
-                    board[cell.X, cell.Y] = cell;
+                    _board[cell.X, cell.Y] = cell;
                 }
             }
         }

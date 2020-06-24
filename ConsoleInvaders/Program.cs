@@ -14,7 +14,7 @@ namespace ConsoleInvaders
             // Create the GameWorld, Player, Invaders and GraphicsManager
             GameWorld game = new GameWorld();
             BallisticManager ballisticManager = new BallisticManager();
-            Player player = new Player(game.X-1);
+            Player player = new Player(game.Y-1);
             Invaders invaders = new Invaders();
             GraphicsManager graphicsManager = new GraphicsManager(game);
 
@@ -29,7 +29,7 @@ namespace ConsoleInvaders
             playerControlThread.Start();
             Thread invaderControlThread = new Thread(invaders.Controller);
             invaderControlThread.Start();
-            Thread ballisticControlThread = new Thread(ballisticManager.Update);
+            Thread ballisticControlThread = new Thread((start) => ballisticManager.Update(invaders.Enemies.Where(x => !x.Dead)));
             ballisticControlThread.Start();
            
             // Game Loop

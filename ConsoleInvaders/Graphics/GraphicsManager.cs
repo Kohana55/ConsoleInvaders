@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleInvaders
 {
@@ -31,9 +27,9 @@ namespace ConsoleInvaders
             Console.Title = "Space Invaders";
             gameWorld = argGameWorld;
             Console.CursorVisible = false;
-            Console.SetWindowSize(gameWorld.Y+2, gameWorld.X+1);
-            Console.BufferHeight = gameWorld.X+1;
-            Console.BufferWidth = gameWorld.Y+2;
+            Console.SetWindowSize(gameWorld.X + 2, gameWorld.Y + 1);
+            Console.BufferWidth = gameWorld.X + 2;
+            Console.BufferHeight = gameWorld.Y + 1;
         }
         #endregion
 
@@ -44,11 +40,11 @@ namespace ConsoleInvaders
         public void Update()
         {
             gameScene = "";
-            for (int i = 0; i < gameWorld.X; i++)
+            for (int y = 0; y < gameWorld.Y; y++)
             {
-                for (int j = 0; j < gameWorld.Y; j++)
+                for (int x = 0; x < gameWorld.X; x++)
                 {
-                    gameScene += gameWorld.GetCellContents(i, j);
+                    gameScene += gameWorld.GetCellContents(x, y);
                 }
 
                 gameScene += "\n";

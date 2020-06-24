@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleInvaders
 {
-    class Player
+    internal class Player
     {
 
         public int X;
@@ -17,25 +17,25 @@ namespace ConsoleInvaders
         /// </summary>
         public Cell[] model =
         {   new Cell (0, 0, "/"),
-            new Cell (0, 1, "-"),
-            new Cell (0, 2, "^"),
-            new Cell (0, 3, "-"),
-            new Cell (0, 4, "\\")
+            new Cell (1, 0, "-"),
+            new Cell (2, 0, "^"),
+            new Cell (3, 0, "-"),
+            new Cell (4, 0, "\\")
         };
 
         private BallisticManager ballisticManager;
 
 
         /// <summary>
-        /// Standard Ctor - must provide starting X-Axis of player
+        /// Standard Ctor - must provide starting Y-Axis of player
         /// </summary>
-        /// <param name="x"></param>
-        public Player(int x)
+        /// <param name="y"></param>
+        public Player(int y)
         {
             foreach (Cell cell in model)
             {
-                cell.X += x;
-                cell.Y += 30;
+                cell.X += 30;
+                cell.Y += y;
                 cell.isRigid = true;
             }
         }
@@ -67,30 +67,30 @@ namespace ConsoleInvaders
                 if (keypress.KeyChar == 'a')
                 {
                     // Bumper to ensure we don't fall out of the array bounds
-                    if (model[0].Y == 0)
+                    if (model[0].X == 0)
                         continue;
 
                     // Move each Cell in the players model, Left
                     foreach (Cell cell in model)
-                        cell.Y -= 1;
+                        cell.X -= 1;
                 }
 
                 // Move Right
                 if (keypress.KeyChar == 'd')
                 {
                     // Bumper to ensure we don't fall out of the array bounds
-                    if (model[4].Y == Y-1)
+                    if (model[4].X == X-1)
                         continue;
 
                     // Move each Cell in the players model, Right
                     foreach (Cell cell in model)
-                        cell.Y += 1;
+                        cell.X += 1;
                 }
 
                 // Shoot
                 if (keypress.KeyChar == ' ')
                 {
-                    ballisticManager.RegisterProjectile(new Projectile(model[2].X - 1, model[2].Y, -1));
+                    ballisticManager.RegisterProjectile(new Projectile(model[2].X, model[2].Y - 1, -1));
                 }
             }
         }

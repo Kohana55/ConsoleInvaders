@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ConsoleInvaders.Models;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleInvaders
 {
@@ -11,13 +8,13 @@ namespace ConsoleInvaders
     /// These units server as the front line
     /// for the Invaders
     /// </summary>
-    class Galactica
+    internal class Galactica : BaseInvader, IInvader
     {
-        public Cell[] Model =
+        public override Cell[] Model { get; } =
         {
             new Cell(0,0,"/"),
-            new Cell(0,1,"o"),
-            new Cell(0,2,"\\")
+            new Cell(1,0,"o"),
+            new Cell(2,0,"\\")
         };
 
         /// <summary>
@@ -27,7 +24,7 @@ namespace ConsoleInvaders
         /// <param name="y"></param>
         public Galactica(int x, int y)
         {
-            foreach(Cell cell in Model)
+            foreach (Cell cell in Model)
             {
                 cell.X += x;
                 cell.Y += y;
@@ -38,7 +35,7 @@ namespace ConsoleInvaders
         /// <summary>
         /// Call each frame to animate Invader
         /// </summary>
-        public void Animate()
+        public override void Animate()
         {
             if (Model[0].Contents == "/")
             {
@@ -52,23 +49,5 @@ namespace ConsoleInvaders
             }
         }
 
-        /// <summary>
-        /// Transforms each cell in a Galatica model by X
-        /// </summary>
-        /// <param name="x"></param>
-        public void Move(int x)
-        {
-            foreach (Cell cell in Model)
-                cell.Y += x;
-        }
-
-        /// <summary>
-        /// Drops each cell down the X-Axis
-        /// </summary>
-        public void Drop()
-        {
-            foreach (Cell cell in Model)
-                cell.X -= -1;
-        }
     }
 }

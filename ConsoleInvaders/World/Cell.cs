@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleInvaders
 {
-    class Cell
+    public class Cell
     {
         /// <summary>
         /// Coords of the cell
