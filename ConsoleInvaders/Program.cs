@@ -22,14 +22,13 @@ namespace ConsoleInvaders
             game.RegisterPlayer(player);
             game.RegisterInvaders(invaders);
             game.RegisterBallisticManager(ballisticManager);
-            player.RegisterBallisticManager(ballisticManager);
 
             // Player and Invader control threads
-            Thread playerControlThread = new Thread(player.Controller);
+            Thread playerControlThread = new Thread(player.Update);
             playerControlThread.Start();
-            Thread invaderControlThread = new Thread(invaders.Controller);
+            Thread invaderControlThread = new Thread(invaders.Update);
             invaderControlThread.Start();
-            Thread ballisticControlThread = new Thread((start) => ballisticManager.Update(invaders.Enemies.Where(x => !x.Dead)));
+            Thread ballisticControlThread = new Thread(ballisticManager.Update);
             ballisticControlThread.Start();
            
             // Game Loop

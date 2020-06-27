@@ -9,8 +9,8 @@ namespace ConsoleInvaders
 
         private Cell[,] _board;
         private Player _player;
-        private Invaders _invaders;
-        private DefenceStructure[] _structures;
+        public Invaders _invaders;
+        public DefenceStructure[] _structures;
         private BallisticManager _ballisticManager;
 
         /// <summary>
@@ -91,6 +91,8 @@ namespace ConsoleInvaders
         public void RegisterBallisticManager(BallisticManager argBallisticManager)
         {
             _ballisticManager = argBallisticManager;
+            _ballisticManager.Game = this;
+            _player.RegisterBallisticManager(_ballisticManager);
         }
 
         /// <summary>

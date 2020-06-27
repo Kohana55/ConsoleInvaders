@@ -54,7 +54,7 @@ namespace ConsoleInvaders
         /// Player controller method
         /// To be run in own thread
         /// </summary>
-        public void Controller()
+        public void Update()
         {
             ConsoleKeyInfo keypress;
 

@@ -12,6 +12,9 @@ namespace ConsoleInvaders
         /// </summary>
         public List<Projectile> Projectiles { get; set; }
 
+        public GameWorld Game { set { _game = value; } }
+        private GameWorld _game;
+
         /// <summary>
         /// 
         /// </summary>
@@ -24,7 +27,7 @@ namespace ConsoleInvaders
         /// Updates all ballistics
         /// To be run in its own thread
         /// </summary>
-        public void Update(IEnumerable<IInvader> invaders)
+        public void Update()
         {
             while (true)
             {
@@ -34,7 +37,7 @@ namespace ConsoleInvaders
                     {
                         projectile.Update();
 
-                        foreach (var invader in invaders)
+                        foreach (var invader in _game._invaders.Enemies)
                         {
                             if (invader.GetHitbox().ContainsCell(projectile.Model))
                             {
@@ -42,6 +45,7 @@ namespace ConsoleInvaders
                                 projectile.Collision = true;
                             }
                         }
+
                     }
 
                     Projectiles.RemoveAll(x => x.Collision);

@@ -30,9 +30,12 @@ namespace ConsoleInvaders.Models
         /// <summary>
         /// Rectangle Width
         /// </summary>
-        public int Width => Math.Abs(Right - Left);
+        public int Width => Math.Abs(Right - Left) + 1;
 
-        public int Height => Math.Abs(Top - Bottom);
+        /// <summary>
+        /// Rectangle Height
+        /// </summary>
+        public int Height => Math.Abs(Top - Bottom) + 1;
 
         public Rectangle(int left, int top, int right, int bottom)
         {

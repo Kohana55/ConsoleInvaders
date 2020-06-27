@@ -6,7 +6,7 @@ namespace ConsoleInvaders
 {
     internal class Invaders
     {
-        public List<IInvader> Enemies = new List<IInvader>();
+        public List<BaseInvader> Enemies = new List<BaseInvader>();
         public int LeftBound;
         public int RightBound;
 
@@ -47,24 +47,25 @@ namespace ConsoleInvaders
         /// Invader controller method
         /// To be run in own thread
         /// </summary>
-        public void Controller()
+        public void Update()
         {
             Thread animationThread = new Thread(Animate);
             animationThread.Start();
 
             while (true)
             {
+                Enemies.RemoveAll(x => x.Dead);
                 UpdateDirectionAndDrop();
-                Update();
+                Move();
 
                 Thread.Sleep(200);
             }
         }
 
         /// <summary>
-        /// Updates all Invader's positions & animations
+        /// Updates all Invader's positions
         /// </summary>
-        private void Update()
+        private void Move()
         {
             for (int i = 0; i < Enemies.Count; i++)
             {
