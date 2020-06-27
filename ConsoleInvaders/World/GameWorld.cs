@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 
 namespace ConsoleInvaders
 {
@@ -93,6 +94,17 @@ namespace ConsoleInvaders
             _ballisticManager = argBallisticManager;
             _ballisticManager.Game = this;
             _player.RegisterBallisticManager(_ballisticManager);
+        }
+
+        public void Start()
+        {
+            // Player and Invader control threads
+            Thread playerControlThread = new Thread(_player.Update);
+            playerControlThread.Start();
+            Thread invaderControlThread = new Thread(_invaders.Update);
+            invaderControlThread.Start();
+            Thread ballisticControlThread = new Thread(_ballisticManager.Update);
+            ballisticControlThread.Start();
         }
 
         /// <summary>
